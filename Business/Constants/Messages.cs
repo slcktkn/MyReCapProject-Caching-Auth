@@ -11,6 +11,9 @@ namespace Business.Constants
        public static string MaintenanceTime = "Servis Zamanı";
        public static string LoadedList = "Liste yüklendi";
        public static string GetBrandsById = "ID'lere göre marka detaylarına ulaşıldı";
-        internal static string GetCarsById;
-    }
+       public static string GetCarsById ="Araç bilgilerine ulaşıldı";
+       public static string CheckIfCarIsValid = "Arac bosta mı kontrol et";
+       public static string ErrorReservation = "Baska arac secin";
+       public static string MadeReservation = "Rezervasyon yapıldı";
+   }
 }

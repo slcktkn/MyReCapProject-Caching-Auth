@@ -12,7 +12,12 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
             //CarTest();
-            CarDetailTest();
+            //CarDetailTest();
+
+            RentalManager rentalManager=new RentalManager(new EfRentalDal());
+
+           rentalManager.Add(new Rental {CarId = 24});
+           //rentalManager.GetRentalCarById(3);
         }
 
         private static void CarDetailTest()

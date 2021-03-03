@@ -6,6 +6,7 @@ using Business.Constants;
 using Core.Utilities;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -28,9 +29,22 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Customer>>(_customerDal.GetAll(c=>c.UserId==userId));
         }
 
+        public IDataResult<List<CustomerDetailsDto>> GetCustomerDetails()
+        {
+            return new SuccessDataResult<List<CustomerDetailsDto>>(_customerDal.GetCustomerDetails(),Messages.ListedDetails);
+        }
+
         public IResult Add(Customer customer)
         {
-            throw new NotImplementedException();
+            if (customer.CompanyName.StartsWith("K"))
+            {
+                return new ErrorResult(Messages.InvalidName);
+            }
+
+            _customerDal.Add(customer);
+            return new SuccessResult(Messages.ValidName);
+
+            ;
         }
     }
 }

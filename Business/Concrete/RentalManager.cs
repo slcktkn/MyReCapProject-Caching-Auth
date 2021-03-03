@@ -19,16 +19,37 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
+        public IDataResult<List<Rental>> GetAll()
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(),Messages.LoadedList);
+        }
+
         public IResult Add(Rental rental)
         {
             //var result = _rentalDal.GetAll(c =>
             //c.CarId == rental.CarId && c.ReturnDate > DateTime.Now || rental.ReturnDate == null).Any();
-            var result = _rentalDal.GetAll(c => c.CarId == rental.CarId&&c.ReturnDate==null).Any();
+            //if (_rentalDal.GetAll(p => p.CarId == rental.CarId && p.ReturnDate == null) != null)  c.CarId == rental.CarId &&
+            var result = _rentalDal.GetAll(c =>  c.ReturnDate==null).Any();
             if (result)
-                return new ErrorResult(Messages.ErrorReservation);
+            {
+               return new ErrorResult(Messages.ErrorReservation);
+            }
             else
+            {
                 _rentalDal.Add(rental);
-            return new SuccessResult(Messages.MadeReservation);
+                return new SuccessResult(Messages.MadeReservation);
+            }
+            //    _rentalDal.GetAll(c => c.CarId == rental.CarId || rental.ReturnDate == null);
+
+            //    if (rental.ReturnDate == null)
+            //    {
+            //        return new ErrorResult(Messages.ErrorReservation);
+            //    }
+            //    else
+            //    {
+            //        _rentalDal.Add(rental);
+            //        return new SuccessResult(Messages.MadeReservation);
+            //    }
         }
 
         public IDataResult<Rental> GetRentalCarById(int carId)

@@ -15,5 +15,6 @@ namespace Business.Constants
        public static string CheckIfCarIsValid = "Arac bosta mı kontrol et";
        public static string ErrorReservation = "Baska arac secin";
        public static string MadeReservation = "Rezervasyon yapıldı";
+       public static string ListedDetails = "Detay bilgi listelendi";
    }
 }

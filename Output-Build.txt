@@ -1,0 +1,10 @@
+﻿Build started...
+1>------ Build started: Project: DataAccess, Configuration: Debug Any CPU ------
+1>DataAccess -> C:\Users\SELCUK\Desktop\CSharpKamp\MyReCapProject\DataAccess\bin\Debug\netstandard2.0\DataAccess.dll
+2>------ Build started: Project: Business, Configuration: Debug Any CPU ------
+2>Business -> C:\Users\SELCUK\Desktop\CSharpKamp\MyReCapProject\Business\bin\Debug\netstandard2.0\Business.dll
+3>------ Build started: Project: ConsoleUI, Configuration: Debug Any CPU ------
+4>------ Build started: Project: WebAPI, Configuration: Debug Any CPU ------
+3>ConsoleUI -> C:\Users\SELCUK\Desktop\CSharpKamp\MyReCapProject\ConsoleUI\bin\Debug\netcoreapp3.1\ConsoleUI.dll
+4>WebAPI -> C:\Users\SELCUK\Desktop\CSharpKamp\MyReCapProject\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.dll
+========== Build: 4 succeeded, 0 failed, 2 up-to-date, 0 skipped ==========

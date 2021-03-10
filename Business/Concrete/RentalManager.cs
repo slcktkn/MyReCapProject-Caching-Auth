@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities;
+using Core.Utilities.Business;
 using DataAccess.Abstract;
 using Entities.Concrete;
 
@@ -21,40 +24,45 @@ namespace Business.Concrete
 
         public IDataResult<List<Rental>> GetAll()
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(),Messages.LoadedList);
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.LoadedList);
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
         {
-            var result = _rentalDal.GetAll(c =>
-            c.CarId == rental.CarId && c.ReturnDate > DateTime.Now || rental.ReturnDate == null).Any();
-            //if (_rentalDal.GetAll(p => p.CarId == rental.CarId && p.ReturnDate == null) != null)  c.CarId == rental.CarId &&
-            //var result = _rentalDal.GetAll(c =>  c.ReturnDate==null).Any();
-            if (result)
+            IResult result = BusinessRules.Run(CheckIfReturnDateIsNull(rental.CarId, rental.ReturnDate)
+                ,CheckIfCarRentalLimitExceeds(rental.CarId));
+            if (result != null)
             {
-               return new ErrorResult(Messages.ErrorReservation);
+                return result;
             }
-            else
-            {
-                _rentalDal.Add(rental);
-                return new SuccessResult(Messages.MadeReservation);
-            }
-            //    _rentalDal.GetAll(c => c.CarId == rental.CarId || rental.ReturnDate == null);
-
-            //    if (rental.ReturnDate == null)
-            //    {
-            //        return new ErrorResult(Messages.ErrorReservation);
-            //    }
-            //    else
-            //    {
-            //        _rentalDal.Add(rental);
-            //        return new SuccessResult(Messages.MadeReservation);
-            //    }
+            _rentalDal.Add(rental);
+            return new SuccessResult(Messages.CarAddedSuccessfully);
         }
 
         public IDataResult<Rental> GetRentalCarById(int carId)
         {
-            return new ErrorDataResult<Rental>(_rentalDal.Get(c=>c.ReturnDate==null),Messages.ErrorReservation);
+            return new ErrorDataResult<Rental>(_rentalDal.Get(c => c.ReturnDate == null), Messages.ErrorReservation);
+        }
+
+        private IResult CheckIfReturnDateIsNull(int id, DateTime? returnDate)
+        {
+            var result = _rentalDal.GetAll(c => c.CarId == id && returnDate == null).Any();
+            if (result)
+            {
+                return new ErrorResult(Messages.ErrorReservation);
+            }
+            return new SuccessResult(Messages.MadeReservation);
+        }
+
+        private IResult CheckIfCarRentalLimitExceeds(int id)
+        {
+            var result = _rentalDal.GetAll(c => c.CarId == id).Count;
+            if (result>3)
+            {
+                return new ErrorResult(Messages.RentalCountOfCarError);
+            }
+            return new SuccessResult();
         }
     }
 }

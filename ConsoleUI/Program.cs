@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
-using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 
 namespace ConsoleUI
@@ -11,13 +9,12 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            //CarTest();
-            //CarDetailTest();
+            CarTest();
+            CarDetailTest();
 
             RentalManager rentalManager=new RentalManager(new EfRentalDal());
-
-           rentalManager.Add(new Rental {CarId = 24});
-           //rentalManager.GetRentalCarById(3);
+            rentalManager.Add(new Rental { CarId = 24 });
+            rentalManager.GetRentalCarById(3);
         }
 
         private static void CarDetailTest()

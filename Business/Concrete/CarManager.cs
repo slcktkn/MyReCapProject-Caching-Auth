@@ -5,6 +5,9 @@ using System.Text;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities;
 using DataAccess.Abstract;
@@ -32,6 +35,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),Messages.LoadedList);
         }
 
+        [CacheRemoveAspect("ICarService.Get")]
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id),Messages.GetCarsById);
@@ -46,7 +50,8 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == id),Messages.GetCarsById);
         }
-
+        [CacheAspect()]
+        [PerformanceAspect(5)]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
@@ -57,6 +62,19 @@ namespace Business.Concrete
         public IDataResult<List<CarDetailsDto>> GetCarDetails()
         {
           return new SuccessDataResult<List<CarDetailsDto>>(_carDal.GetCarDetails(),Messages.LoadedList);
+        }
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Car car)
+        {
+            Add(car);
+            if (car.DailyPrice<2500)
+            {
+                throw new Exception("");
+            }
+
+            Add(car);
+            return null;
         }
     }
 }

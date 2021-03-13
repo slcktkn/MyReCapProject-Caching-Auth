@@ -52,10 +52,10 @@ namespace WebAPI
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
                 };
-            } );
+            });
 
 
-        //services.AddSingleton<ICarService, CarManager>();
+            //services.AddSingleton<ICarService, CarManager>();
             //services.AddSingleton<ICarDal, EfCarDal>();
             //services.AddSingleton<IRentalService, RentalManager>();
             //services.AddSingleton<IRentalDal, EfRentalDal>();
@@ -76,10 +76,12 @@ namespace WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
             app.UseStaticFiles();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
